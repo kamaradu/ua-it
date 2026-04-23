@@ -17,9 +17,10 @@ async function loadWords() {
     .map(r => r.split(","))
     .filter(r => r.length >= 2)
     .map(r => ({
-      ua: r[0].replace(/"/g, "").trim(),
-      it: r[1].replace(/"/g, "").trim()
-    }));
+  ua: r[0].replace(/"/g, "").trim(),
+  it: r[1].replace(/"/g, "").trim(),
+  extra: (r[2] || "").replace(/"/g, "").trim()
+}));
 }
 
 // RENDER
@@ -32,18 +33,26 @@ function render() {
     row.className = "row" + (i === index ? " active" : "");
 
     row.innerHTML = `
-      <div class="word">
-        <div class="ua">${w.ua}</div>
-        <div class="it">${w.it}</div>
-      </div>
-      <button class="play-btn" onclick="playOne(${i})">▶️</button>
-    `;
+  <div class="word">
+    <div class="line">
+      ${w.ua} / <span class="it">${w.it}</span>
+      ${w.extra ? `<span class="extra"> [${w.extra}]</span>` : ""}
+    </div>
+  </div>
+  <button class="play-btn" onclick="playOne(${i})">▶️</button>
+`;
 
     list.appendChild(row);
   });
 
-  document.getElementById("currentWord").innerText = words[index]?.ua || "";
-  document.getElementById("currentTranslation").innerText = words[index]?.it || "";
+  const current = words[index];
+
+document.getElementById("currentWord").innerHTML =
+  current
+    ? `${current.ua} / <span class="it">${current.it}</span> ${current.extra ? `[${current.extra}]` : ""}`
+    : "";
+
+document.getElementById("currentTranslation").innerText = "";
 }
 
 // SPEAK
