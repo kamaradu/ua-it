@@ -103,3 +103,17 @@ body {
 .ctrl-btn:active {
   transform: scale(0.92);
 }
+
+.line {
+  font-size: 18px;
+}
+
+.it {
+  opacity: 0.75;
+}
+
+.extra {
+  color: var(--secondary);
+  font-size: 14px;
+  margin-left: 6px;
+}
