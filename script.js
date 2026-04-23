@@ -57,10 +57,10 @@ document.getElementById("currentTranslation").innerText = "";
 
 // SPEAK
 function speak(text, lang) {
-  speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang = lang;
-  speechSynthesis.speak(u);
+  const url = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(text)}&tl=${lang}&client=tw-ob`;
+
+  const audio = new Audio(url);
+  audio.play();
 }
 
 // SEQUENCE
