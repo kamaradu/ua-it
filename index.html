@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-
 <title>Word Player</title>
 
 <style>
@@ -20,9 +19,10 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, sans-serif;
   background: var(--bg);
   color: var(--text);
-  padding-bottom: 90px;
+  padding-bottom: 90px; /* щоб контент не перекривався панеллю */
 }
 
+/* PLAYER */
 .player {
   text-align: center;
   padding: 24px 16px 10px;
@@ -39,6 +39,7 @@ body {
   margin-top: 6px;
 }
 
+/* LIST */
 .list {
   padding: 12px;
 }
@@ -62,29 +63,16 @@ body {
   flex-direction: column;
 }
 
-.it {
+.ua {
   font-size: 18px;
 }
 
-.ua {
+.it {
   font-size: 14px;
   color: var(--secondary);
 }
 
-.tr {
-  font-size: 12px;
-  color: #8e8e93;
-}
-
-.cat {
-  font-size: 11px;
-  background: #2c2c2e;
-  padding: 4px 8px;
-  border-radius: 999px;
-  display: inline-block;
-  margin-top: 4px;
-}
-
+/* PLAY BUTTON IN ROW */
 .play-btn {
   min-width: 40px;
   min-height: 40px;
@@ -95,6 +83,7 @@ body {
   font-size: 16px;
 }
 
+/* BOTTOM CONTROL BAR */
 .controls-bar {
   position: fixed;
   bottom: 0;
@@ -107,8 +96,9 @@ body {
   justify-content: space-around;
 }
 
+/* CONTROL BUTTONS */
 .ctrl-btn {
-  min-width: 44px;
+  min-width: 44px;   /* більше ніж 40px для зручності */
   min-height: 44px;
   border-radius: 12px;
   border: none;
@@ -132,8 +122,8 @@ body {
 
 <div id="list" class="list"></div>
 
+<!-- НИЖНЯ ПАНЕЛЬ -->
 <div class="controls-bar">
-  <button class="ctrl-btn" onclick="toggleRandom()" id="randomBtn" style="opacity:0.5">🔀</button>
   <button class="ctrl-btn" onclick="prev()">⏮</button>
   <button class="ctrl-btn" onclick="play()">▶️</button>
   <button class="ctrl-btn" onclick="pause()">⏸</button>
@@ -147,10 +137,8 @@ let words = [];
 let index = 0;
 let playing = false;
 let timeout;
-let randomMode = false;
-let lastIndex = -1;
 
-const DELAY = 3000;
+const DELAY = 4000; // ⏱ фіксовано 4 секунди
 
 // LOAD
 async function loadWords() {
@@ -161,10 +149,8 @@ async function loadWords() {
     .map(r => r.split(","))
     .filter(r => r.length >= 2)
     .map(r => ({
-      it: r[0].replace(/"/g, "").trim(),
-      ua: r[1].replace(/"/g, "").trim(),
-      tr: r[2]?.replace(/"/g, "").trim() || "",
-      cat: r[3]?.replace(/"/g, "").trim() || ""
+      ua: r[0].replace(/"/g, "").trim(),
+      it: r[1].replace(/"/g, "").trim()
     }));
 }
 
@@ -179,10 +165,8 @@ function render() {
 
     row.innerHTML = `
       <div class="word">
-        <div class="it">${w.it}</div>
         <div class="ua">${w.ua}</div>
-        <div class="tr">${w.tr}</div>
-        <div class="cat">${w.cat}</div>
+        <div class="it">${w.it}</div>
       </div>
       <button class="play-btn" onclick="playOne(${i})">▶️</button>
     `;
@@ -190,8 +174,8 @@ function render() {
     list.appendChild(row);
   });
 
-  document.getElementById("currentWord").innerText = words[index]?.it || "";
-  document.getElementById("currentTranslation").innerText = words[index]?.ua || "";
+  document.getElementById("currentWord").innerText = words[index]?.ua || "";
+  document.getElementById("currentTranslation").innerText = words[index]?.it || "";
 }
 
 // SPEAK
@@ -213,13 +197,13 @@ function playSequence(i) {
 
   const w = words[i];
 
-  speak(w.it, "it-IT");
+  speak(w.ua, "uk-UA");
 
   timeout = setTimeout(() => {
-    speak(w.ua, "uk-UA");
+    speak(w.it, "it-IT");
 
     timeout = setTimeout(() => {
-      speak(w.ua, "uk-UA");
+      speak(w.it, "it-IT");
 
       if (playing) {
         timeout = setTimeout(next, DELAY);
@@ -243,18 +227,7 @@ function pause() {
 }
 
 function next() {
-  if (randomMode) {
-    let newIndex;
-    do {
-      newIndex = Math.floor(Math.random() * words.length);
-    } while (newIndex === lastIndex && words.length > 1);
-
-    lastIndex = newIndex;
-    index = newIndex;
-  } else {
-    index = (index + 1) % words.length;
-  }
-
+  index = (index + 1) % words.length;
   playSequence(index);
 }
 
@@ -266,11 +239,6 @@ function prev() {
 function playOne(i) {
   playing = false;
   playSequence(i);
-}
-
-function toggleRandom() {
-  randomMode = !randomMode;
-  document.getElementById("randomBtn").style.opacity = randomMode ? "1" : "0.5";
 }
 
 // INIT
