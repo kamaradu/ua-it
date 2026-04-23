@@ -1,4 +1,3 @@
-
 const url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRYxU7tQ9zljOOosiBseSOOUUmNHINufeWHdczDkEZMXzqPHyO81aXhrvQojO42j8AW5teS_nROvrKe/pub?gid=0&single=true&output=csv";
 
 let words = [];
@@ -6,9 +5,14 @@ let index = 0;
 let playing = false;
 let timeout;
 
-const DELAY = 4000; // ⏱ фіксовано 4 секунди
+const DELAY = 4000;
 
-// LOAD
+// ===== CLEAN (важливо для файлів)
+function clean(text) {
+  return text.replace(/[^\wа-яіїєґ]/gi, "_").toLowerCase();
+}
+
+// ===== LOAD
 async function loadWords() {
   const res = await fetch(url);
   const text = await res.text();
@@ -17,13 +21,12 @@ async function loadWords() {
     .map(r => r.split(","))
     .filter(r => r.length >= 2)
     .map(r => ({
-  ua: r[0].replace(/"/g, "").trim(),
-  it: r[1].replace(/"/g, "").trim(),
-  extra: (r[2] || "").replace(/"/g, "").trim()
-}));
+      ua: r[0].replace(/"/g, "").trim(),
+      it: r[1].replace(/"/g, "").trim()
+    }));
 }
 
-// RENDER
+// ===== RENDER
 function render() {
   const list = document.getElementById("list");
   list.innerHTML = "";
@@ -33,65 +36,44 @@ function render() {
     row.className = "row" + (i === index ? " active" : "");
 
     row.innerHTML = `
-  <div class="word">
-    <div class="line">
-      ${w.ua} / <span class="it">${w.it}</span>
-      ${w.extra ? `<span class="extra"> [${w.extra}]</span>` : ""}
-    </div>
-  </div>
-  <button class="play-btn" onclick="playOne(${i})">▶️</button>
-`;
+      <div class="line">
+        ${w.ua} / <span class="it">${w.it}</span>
+      </div>
+      <button onclick="playOne(${i})">▶️</button>
+    `;
 
     list.appendChild(row);
   });
 
   const current = words[index];
-
-document.getElementById("currentWord").innerHTML =
-  current
-    ? `${current.ua} / <span class="it">${current.it}</span> ${current.extra ? `[${current.extra}]` : ""}`
-    : "";
-
-document.getElementById("currentTranslation").innerText = "";
+  document.getElementById("currentWord").innerHTML =
+    current ? `${current.ua} / <span class="it">${current.it}</span>` : "";
 }
 
-// SPEAK
-function speak(text, lang) {
-  const url = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(text)}&tl=${lang}&client=tw-ob`;
-
-  const audio = new Audio(url);
+// ===== AUDIO
+function speak(text) {
+  const file = `audio/${clean(text)}.mp3`;
+  const audio = new Audio(file);
   audio.play();
 }
 
-// SEQUENCE
+// ===== SEQUENCE
 function playSequence(i) {
   clearTimeout(timeout);
-  speechSynthesis.cancel();
 
   index = i;
-  localStorage.setItem("pos", index);
   render();
 
   const w = words[i];
 
-  speak(w.ua, "uk-UA");
+  speak(w.ua);
 
-  timeout = setTimeout(() => {
-    speak(w.it, "it-IT");
-
-    timeout = setTimeout(() => {
-      speak(w.it, "it-IT");
-
-      if (playing) {
-        timeout = setTimeout(next, DELAY);
-      }
-
-    }, DELAY);
-
-  }, DELAY);
+  if (playing) {
+    timeout = setTimeout(next, DELAY);
+  }
 }
 
-// CONTROLS
+// ===== CONTROLS
 function play() {
   playing = true;
   playSequence(index);
@@ -99,7 +81,6 @@ function play() {
 
 function pause() {
   playing = false;
-  speechSynthesis.cancel();
   clearTimeout(timeout);
 }
 
@@ -113,15 +94,20 @@ function prev() {
   playSequence(index);
 }
 
+function randomPlay() {
+  playing = true;
+  const i = Math.floor(Math.random() * words.length);
+  playSequence(i);
+}
+
 function playOne(i) {
   playing = false;
   playSequence(i);
 }
 
-// INIT
+// ===== INIT
 async function init() {
   words = await loadWords();
-  index = parseInt(localStorage.getItem("pos")) || 0;
   render();
 }
 
