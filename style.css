@@ -1,1 +1,105 @@
 
+:root {
+  --bg: #0f0f10;
+  --card: #1c1c1e;
+  --text: #ffffff;
+  --secondary: #8e8e93;
+  --accent: #0a84ff;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  padding-bottom: 90px; /* щоб контент не перекривався панеллю */
+}
+
+/* PLAYER */
+.player {
+  text-align: center;
+  padding: 24px 16px 10px;
+}
+
+.current {
+  font-size: 34px;
+  font-weight: 600;
+}
+
+.translation {
+  font-size: 20px;
+  color: var(--secondary);
+  margin-top: 6px;
+}
+
+/* LIST */
+.list {
+  padding: 12px;
+}
+
+.row {
+  background: var(--card);
+  border-radius: 16px;
+  padding: 14px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.row.active {
+  outline: 2px solid var(--accent);
+}
+
+.word {
+  display: flex;
+  flex-direction: column;
+}
+
+.ua {
+  font-size: 18px;
+}
+
+.it {
+  font-size: 14px;
+  color: var(--secondary);
+}
+
+/* PLAY BUTTON IN ROW */
+.play-btn {
+  min-width: 40px;
+  min-height: 40px;
+  border-radius: 12px;
+  border: none;
+  background: #2c2c2e;
+  color: white;
+  font-size: 16px;
+}
+
+/* BOTTOM CONTROL BAR */
+.controls-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+  background: rgba(28,28,30,0.9);
+  backdrop-filter: blur(20px);
+  display: flex;
+  justify-content: space-around;
+}
+
+/* CONTROL BUTTONS */
+.ctrl-btn {
+  min-width: 44px;   /* більше ніж 40px для зручності */
+  min-height: 44px;
+  border-radius: 12px;
+  border: none;
+  background: var(--card);
+  color: white;
+  font-size: 18px;
+}
+
+.ctrl-btn:active {
+  transform: scale(0.92);
+}
