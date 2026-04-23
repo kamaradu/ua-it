@@ -1,32 +1,29 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>UA - IT Player</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Word Player</title>
 
-<link rel="stylesheet" href="style.css">
-
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
 <div class="player">
   <div id="currentWord" class="current">—</div>
-  <div id="currentTranslation" class="translation"></div>
 </div>
 
 <div id="list" class="list"></div>
 
-<!-- НИЖНЯ ПАНЕЛЬ -->
 <div class="controls-bar">
   <button class="ctrl-btn" onclick="prev()">⏮</button>
   <button class="ctrl-btn" onclick="play()">▶️</button>
   <button class="ctrl-btn" onclick="pause()">⏸</button>
   <button class="ctrl-btn" onclick="next()">⏭</button>
+  <button class="ctrl-btn" onclick="randomPlay()">🎲</button>
 </div>
 
 <script src="script.js"></script>
-
 </body>
 </html>
