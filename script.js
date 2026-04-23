@@ -8,7 +8,7 @@ let timeout;
 
 const DELAY = 4000;
 
-// ===== CLEAN (для назв mp3 файлів)
+// ===== CLEAN (для назв mp3)
 function clean(text) {
   return text
     .normalize("NFD")
@@ -17,7 +17,7 @@ function clean(text) {
     .toLowerCase();
 }
 
-// ===== LOAD WORDS FROM GOOGLE SHEETS
+// ===== LOAD GOOGLE SHEETS
 async function loadWords() {
   const res = await fetch(url);
   const text = await res.text();
@@ -58,15 +58,22 @@ function render() {
       : "";
 }
 
-// ===== AUDIO (1 FILE PER WORD PAIR)
+// ===== AUDIO (UA → IT)
 function speak(ua, it) {
-  const file = `audio/${clean(ua)}_${clean(it)}.mp3`;
+  const uaFile = `audio/${clean(ua)}_ua.mp3`;
+  const itFile = `audio/${clean(it)}_it.mp3`;
 
-  const audio = new Audio(file);
-  audio.play();
+  const uaAudio = new Audio(uaFile);
+
+  uaAudio.play();
+
+  uaAudio.onended = () => {
+    const itAudio = new Audio(itFile);
+    itAudio.play();
+  };
 }
 
-// ===== PLAY SEQUENCE
+// ===== SEQUENCE
 function playSequence(i) {
   clearTimeout(timeout);
 
