@@ -1,1 +1,225 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Word Player PRO</title>
 
+<style>
+body { font-family: sans-serif; padding: 20px; }
+table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+td, th { border: 1px solid #ccc; padding: 8px; }
+button { margin: 4px; }
+.active { background: #d3f9d8; }
+</style>
+</head>
+
+<body>
+
+<h2>🎧 Word Player PRO</h2>
+
+<button onclick="manualRefresh()">🔄 Оновити</button>
+<button onclick="togglePlay()">▶️ / ⏸</button>
+<button onclick="prev()">⏮</button>
+<button onclick="next()">⏭</button>
+
+<label>
+🔀 Random
+<input type="checkbox" id="randomToggle" onchange="toggleRandom()">
+</label>
+
+<label>Затримка:
+<select id="delay">
+<option value="2000">2 сек</option>
+<option value="4000">4 сек</option>
+</select>
+</label>
+
+<label>Гучність:
+<input type="range" min="0" max="1" step="0.1" value="1" id="volume">
+</label>
+
+<table>
+<thead>
+<tr>
+<th>UA</th>
+<th>IT</th>
+<th>▶️</th>
+</tr>
+</thead>
+<tbody id="table"></tbody>
+</table>
+
+<script>
+const url = "PASTE_YOUR_CSV_LINK_HERE";
+
+let words = [];
+let currentIndex = 0;
+let isPlaying = false;
+let isRandom = false;
+let currentTimeout = null;
+
+// ------- LOAD -------
+async function loadWords() {
+  const res = await fetch(url);
+  const text = await res.text();
+
+  return text.split("\n")
+    .map(r => r.split(","))
+    .filter(r => r.length >= 2)
+    .map(r => ({
+      ua: r[0].trim(),
+      it: r[1].trim()
+    }));
+}
+
+// ------- CACHE (Speech Preload Trick) -------
+function preloadSpeech(text, lang) {
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = lang;
+  u.volume = 0; // без звуку
+  speechSynthesis.speak(u);
+}
+
+function preloadAll() {
+  words.forEach(w => {
+    preloadSpeech(w.ua, "uk-UA");
+    preloadSpeech(w.it, "it-IT");
+  });
+}
+
+// ------- STORAGE -------
+function saveState() {
+  localStorage.setItem("word_index", currentIndex);
+}
+
+function loadState() {
+  const saved = localStorage.getItem("word_index");
+  if (saved !== null) currentIndex = parseInt(saved);
+}
+
+// ------- RENDER -------
+function render() {
+  const tbody = document.getElementById("table");
+  tbody.innerHTML = "";
+
+  words.forEach((w, i) => {
+    const tr = document.createElement("tr");
+
+    if (i === currentIndex) tr.classList.add("active");
+
+    tr.innerHTML = `
+      <td>${w.ua}</td>
+      <td>${w.it}</td>
+      <td><button onclick="playOne(${i})">▶️</button></td>
+    `;
+
+    tbody.appendChild(tr);
+  });
+}
+
+// ------- SPEAK -------
+function speak(text, lang) {
+  speechSynthesis.cancel();
+
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = lang;
+  u.volume = document.getElementById("volume").value;
+
+  speechSynthesis.speak(u);
+}
+
+// ------- PLAY SEQUENCE -------
+function playSequence(index) {
+  clearTimeout(currentTimeout);
+  speechSynthesis.cancel();
+
+  currentIndex = index;
+  saveState();
+  render();
+
+  const delay = parseInt(document.getElementById("delay").value);
+  const w = words[index];
+
+  // UA
+  speak(w.ua, "uk-UA");
+
+  currentTimeout = setTimeout(() => {
+    // IT
+    speak(w.it, "it-IT");
+
+    currentTimeout = setTimeout(() => {
+      // IT repeat
+      speak(w.it, "it-IT");
+
+      if (isPlaying) {
+        currentTimeout = setTimeout(() => {
+          next();
+        }, delay);
+      }
+
+    }, delay);
+
+  }, delay);
+}
+
+// ------- CONTROLS -------
+function playOne(index) {
+  isPlaying = false;
+  playSequence(index);
+}
+
+function togglePlay() {
+  isPlaying = !isPlaying;
+
+  if (isPlaying) {
+    playSequence(currentIndex);
+  } else {
+    speechSynthesis.cancel();
+    clearTimeout(currentTimeout);
+  }
+}
+
+function next() {
+  if (isRandom) {
+    currentIndex = Math.floor(Math.random() * words.length);
+  } else {
+    currentIndex = (currentIndex + 1) % words.length;
+  }
+  playSequence(currentIndex);
+}
+
+function prev() {
+  currentIndex = (currentIndex - 1 + words.length) % words.length;
+  playSequence(currentIndex);
+}
+
+// ------- RANDOM -------
+function toggleRandom() {
+  isRandom = document.getElementById("randomToggle").checked;
+}
+
+// ------- REFRESH -------
+async function manualRefresh() {
+  speechSynthesis.cancel();
+  clearTimeout(currentTimeout);
+
+  words = await loadWords();
+  render();
+  preloadAll(); // кеш після оновлення
+}
+
+// ------- INIT -------
+async function init() {
+  words = await loadWords();
+  loadState();
+  render();
+
+  // preload через 1 секунду (щоб не лагало старт)
+  setTimeout(preloadAll, 1000);
+}
+
+init();
+</script>
+
+</body>
+</html>
