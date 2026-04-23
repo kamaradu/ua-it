@@ -1,4 +1,5 @@
-const url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRYxU7tQ9zljOOosiBseSOOUUmNHINufeWHdczDkEZMXzqPHyO81aXhrvQojO42j8AW5teS_nROvrKe/pub?gid=0&single=true&output=csv";
+const url =
+  "https://docs.google.com/spreadsheets/d/e/2PACX-1vRYxU7tQ9zljOOosiBseSOOUUmNHINufeWHdczDkEZMXzqPHyO81aXhrvQojO42j8AW5teS_nROvrKe/pub?gid=0&single=true&output=csv";
 
 let words = [];
 let index = 0;
@@ -7,26 +8,31 @@ let timeout;
 
 const DELAY = 4000;
 
-// ===== CLEAN (важливо для файлів)
+// ===== CLEAN (для назв mp3 файлів)
 function clean(text) {
-  return text.replace(/[^\wа-яіїєґ]/gi, "_").toLowerCase();
+  return text
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-zA-Zа-яА-Яіїєґ0-9]/g, "_")
+    .toLowerCase();
 }
 
-// ===== LOAD
+// ===== LOAD WORDS FROM GOOGLE SHEETS
 async function loadWords() {
   const res = await fetch(url);
   const text = await res.text();
 
-  return text.split("\n")
-    .map(r => r.split(","))
-    .filter(r => r.length >= 2)
-    .map(r => ({
+  return text
+    .split("\n")
+    .map((r) => r.split(","))
+    .filter((r) => r.length >= 2)
+    .map((r) => ({
       ua: r[0].replace(/"/g, "").trim(),
-      it: r[1].replace(/"/g, "").trim()
+      it: r[1].replace(/"/g, "").trim(),
     }));
 }
 
-// ===== RENDER
+// ===== RENDER UI
 function render() {
   const list = document.getElementById("list");
   list.innerHTML = "";
@@ -47,17 +53,20 @@ function render() {
 
   const current = words[index];
   document.getElementById("currentWord").innerHTML =
-    current ? `${current.ua} / <span class="it">${current.it}</span>` : "";
+    current
+      ? `${current.ua} / <span class="it">${current.it}</span>`
+      : "";
 }
 
-// ===== AUDIO
-function speak(text) {
-  const file = `audio/${clean(text)}.mp3`;
+// ===== AUDIO (1 FILE PER WORD PAIR)
+function speak(ua, it) {
+  const file = `audio/${clean(ua)}_${clean(it)}.mp3`;
+
   const audio = new Audio(file);
   audio.play();
 }
 
-// ===== SEQUENCE
+// ===== PLAY SEQUENCE
 function playSequence(i) {
   clearTimeout(timeout);
 
@@ -66,7 +75,7 @@ function playSequence(i) {
 
   const w = words[i];
 
-  speak(w.ua);
+  speak(w.ua, w.it);
 
   if (playing) {
     timeout = setTimeout(next, DELAY);
