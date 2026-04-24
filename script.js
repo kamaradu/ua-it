@@ -1,4 +1,3 @@
-
 const url =
   "https://docs.google.com/spreadsheets/d/e/2PACX-1vRYxU7tQ9zljOOosiBseSOOUUmNHINufeWHdczDkEZMXzqPHyO81aXhrvQojO42j8AW5teS_nROvrKe/pub?gid=0&single=true&output=csv";
 
@@ -74,12 +73,30 @@ function render() {
     const row = document.createElement("div");
     row.className = "row" + (i === index ? " active" : "");
 
-    row.innerHTML = `
-      <div class="line">
-        ${w.ua} / <span class="it">${w.it}</span>
+    // Create row content with Font Awesome icon
+    const rowContent = document.createElement("div");
+    rowContent.className = "row-content";
+    rowContent.innerHTML = `
+      <div class="row-primary">${w.ua}</div>
+      <div>
+        <span class="row-separator">/</span>
+        <span class="row-secondary">${w.it}</span>
       </div>
-      <button onclick="playOne(${i})">▶️</button>
     `;
+
+    // Create play button with Font Awesome icon
+    const playBtn = document.createElement("button");
+    playBtn.className = "row-action btn-icon-small";
+    playBtn.type = "button";
+    playBtn.title = "Play";
+    playBtn.onclick = (e) => {
+      e.stopPropagation();
+      playOne(i);
+    };
+    playBtn.innerHTML = '<i class="fas fa-play"></i>';
+
+    row.appendChild(rowContent);
+    row.appendChild(playBtn);
 
     list.appendChild(row);
   });
@@ -87,7 +104,7 @@ function render() {
   const current = words[index];
   document.getElementById("currentWord").innerHTML =
     current
-      ? `${current.ua} / <span class="it">${current.it}</span>`
+      ? `<span class="uk">${current.ua}</span><span class="separator">/</span><span class="it">${current.it}</span>`
       : "";
 }
 
