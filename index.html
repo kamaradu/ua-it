@@ -4,18 +4,29 @@
   <meta charset="UTF-8" />
   <title>Word Player</title>
   <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
 <body>
 
   <h1>Word Player</h1>
 
-  <div id="controls">
-    <button id="btnPlay">▶️ Play</button>
-    <button id="btnPause">⏸ Pause</button>
-    <button id="btnNext">⏭</button>
-    <button id="btnPrev">⏮</button>
-    <button id="btnRandom">🔀 Random</button>
-  </div>
+<div id="controls">
+  <button id="btnPlay" class="btn-icon" title="Play">
+    <i class="fas fa-play"></i>
+  </button>
+  <button id="btnPause" class="btn-icon" title="Pause">
+    <i class="fas fa-pause"></i>
+  </button>
+  <button id="btnNext" class="btn-icon" title="Next">
+    <i class="fas fa-step-forward"></i>
+  </button>
+  <button id="btnPrev" class="btn-icon" title="Previous">
+    <i class="fas fa-step-backward"></i>
+  </button>
+  <button id="btnRandom" class="btn-icon" title="Shuffle">
+    <i class="fas fa-shuffle"></i>
+  </button>
+</div>
 
   <div id="currentWord" class="current"></div>
 
