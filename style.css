@@ -80,7 +80,7 @@ body {
   padding: var(--spacing-xl) var(--spacing-lg);
   
   text-align: center;
-  font-size: var(--font-size-xl);
+  font-size: var(--font-size-2xl);
   font-weight: 600;
   line-height: 1.6;
   
