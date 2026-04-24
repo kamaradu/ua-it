@@ -27,7 +27,13 @@ function playAudio(src) {
     audio.onended = () => resolve();
     audio.onerror = () => resolve();
 
-    audio.play();
+    // Add small delay before playing
+    setTimeout(() => {
+      audio.play().catch(error => {
+        console.error("Play failed:", src, error);
+        resolve();
+      });
+    }, 100);
   });
 }
 
