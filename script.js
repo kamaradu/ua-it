@@ -74,6 +74,7 @@ function render() {
     content.innerHTML = `
       <div>
         <span class="list-item-primary">${w.ua}</span>
+        <span class="list-item-separator">/</span>
         <span class="list-item-secondary">${w.it}</span>
       </div>
     `;
@@ -100,7 +101,7 @@ function render() {
   const displayEl = document.getElementById("currentWord");
   displayEl.innerHTML =
     current
-      ? `<span class="uk">${current.ua}</span><span class="separator">/</span><span class="it">${current.it}</span>`
+      ? `<span class="uk">${current.ua}</span><span class="it">${current.it}</span>`
       : "";
 }
 
