@@ -73,7 +73,7 @@ function render() {
     const row = document.createElement("div");
     row.className = "row" + (i === index ? " active" : "");
 
-    // Create row content with Font Awesome icon
+    // Create row content
     const rowContent = document.createElement("div");
     rowContent.className = "row-content";
     rowContent.innerHTML = `
@@ -84,7 +84,7 @@ function render() {
       </div>
     `;
 
-    // Create play button with Font Awesome icon
+    // Create play button
     const playBtn = document.createElement("button");
     playBtn.className = "row-action btn-icon-small";
     playBtn.type = "button";
@@ -102,6 +102,7 @@ function render() {
   });
 
   const current = words[index];
+  // Display in one line: як? / come?
   document.getElementById("currentWord").innerHTML =
     current
       ? `<span class="uk">${current.ua}</span><span class="separator">/</span><span class="it">${current.it}</span>`
