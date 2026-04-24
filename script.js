@@ -8,31 +8,23 @@ let timeout;
 
 const DELAY = 4000;
 
-// ===== CLEAN (для назв mp3)
-function clean(text) {
-  return text
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-zA-Zа-яА-Яіїєґ0-9]/g, "_")
-    .toLowerCase();
-}
-
-// ===== LOAD GOOGLE SHEETS
+// ===== LOAD WORDS
 async function loadWords() {
   const res = await fetch(url);
   const text = await res.text();
 
   return text
     .split("\n")
-    .map((r) => r.split(","))
-    .filter((r) => r.length >= 2)
-    .map((r) => ({
-      ua: r[0].replace(/"/g, "").trim(),
-      it: r[1].replace(/"/g, "").trim(),
+    .map(r => r.split(","))
+    .filter(r => r.length >= 3)
+    .map(r => ({
+      id: r[0].trim(),
+      ua: r[1].replace(/"/g, "").trim(),
+      it: r[2].replace(/"/g, "").trim()
     }));
 }
 
-// ===== RENDER UI
+// ===== RENDER
 function render() {
   const list = document.getElementById("list");
   list.innerHTML = "";
@@ -58,17 +50,14 @@ function render() {
       : "";
 }
 
-// ===== AUDIO (UA → IT)
-function speak(ua, it) {
-  const uaFile = `audio/${clean(ua)}_ua.mp3`;
-  const itFile = `audio/${clean(it)}_it.mp3`;
-
-  const uaAudio = new Audio(uaFile);
+// ===== AUDIO (ID-based)
+function speak(id) {
+  const uaAudio = new Audio(`audio/${id}_ua.mp3`);
 
   uaAudio.play();
 
   uaAudio.onended = () => {
-    const itAudio = new Audio(itFile);
+    const itAudio = new Audio(`audio/${id}_it.mp3`);
     itAudio.play();
   };
 }
@@ -82,7 +71,7 @@ function playSequence(i) {
 
   const w = words[i];
 
-  speak(w.ua, w.it);
+  speak(w.id);
 
   if (playing) {
     timeout = setTimeout(next, DELAY);
