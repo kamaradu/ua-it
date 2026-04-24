@@ -171,40 +171,6 @@ body {
   }
 }
 
-/* Rotating Phrase - Gentle Bounce */
-.rotating-phrase {
-  font-size: var(--font-size-base);
-  color: var(--color-text-secondary);
-  font-weight: 400;
-  text-align: right;
-  flex: 1;
-  
-  animation: fadeInOutGentleBounce 3s ease-in-out infinite;
-  min-height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-}
-
-@keyframes fadeInOutGentleBounce {
-  0% {
-    opacity: 0;
-    transform: translateY(3px) scale(0.95);
-  }
-  10% {
-    opacity: 1;
-    transform: translateY(-1px) scale(1.02);
-  }
-  85% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(-3px) scale(0.95);
-  }
-}
-
 /* ============================================
    LIST CONTAINER
    ============================================ */
@@ -344,7 +310,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--spacing-lg);
+  gap: var(--spacing-sm);
   flex-wrap: wrap;
   
   padding: var(--spacing-lg) var(--spacing-md) calc(var(--spacing-lg) + env(safe-area-inset-bottom)) var(--spacing-md);
