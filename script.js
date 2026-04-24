@@ -9,21 +9,21 @@ let timeout;
 const DELAY = 4000;
 
 // ===== LOAD WORDS
-function loadWords() {
-  return fetch(url)
-    .then(res => res.text())
-    .then(text => {
-      return text
-        .split("\n")
-        .slice(1) // 🔥 ВАЖЛИВО: прибираємо header
-        .map(r => r.split(","))
-        .filter(r => r.length >= 3)
-        .map(r => ({
-          id: r[0].trim(),
-          ua: r[1].replace(/"/g, "").trim(),
-          it: r[2].replace(/"/g, "").trim()
-        }));
-    });
+async function loadWords() {
+  const res = await fetch(url);
+  const text = await res.text();
+
+  return text
+    .split("\n")
+    .slice(1) // прибираємо header
+    .map(r => r.split(","))
+    .filter(r => r.length >= 2)
+    .map((r, index) => ({
+      id: (index + 1).toString(), // 🔥 автоматичний ID
+      ua: r[0].replace(/"/g, "").trim(),
+      it: r[1].replace(/"/g, "").trim()
+    }))
+    .filter(w => w.ua !== "" && w.it !== "");
 }
 
 // ===== RENDER
