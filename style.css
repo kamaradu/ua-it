@@ -136,7 +136,7 @@ a:hover {
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
+  /*flex-direction: column;*/
   gap: var(--spacing-sm);
 }
 
