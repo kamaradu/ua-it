@@ -74,7 +74,6 @@ function render() {
     content.innerHTML = `
       <div>
         <span class="list-item-primary">${w.ua}</span>
-        <span class="list-item-separator">/</span>
         <span class="list-item-secondary">${w.it}</span>
       </div>
     `;
