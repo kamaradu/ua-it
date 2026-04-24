@@ -75,7 +75,7 @@ function detectDevice() {
 }
 
 // =====================
-// AUDIO ENGINE
+// AUDIO ENGINE - MOBILE OPTIMIZED
 // =====================
 
 function playAudio(src) {
@@ -88,25 +88,32 @@ function playAudio(src) {
     if (currentAudio) {
       debug.info(`🔇 Pausing previous audio`);
       currentAudio.pause();
+      currentAudio.currentTime = 0;
       currentAudio = null;
     }
 
     debug.info(`📂 Loading: ${src}`);
 
-    const audio = new Audio(src);
+    const audio = new Audio();
     currentAudio = audio;
 
-    // Set audio attributes for better mobile support
+    // Mobile-friendly audio settings
     audio.crossOrigin = 'anonymous';
     audio.preload = 'auto';
+    audio.controls = false;
+    
+    // Add query parameter to prevent caching issues
+    audio.src = src + '?t=' + Date.now();
 
     audio.onended = () => {
       debug.success(`✅ Ended: ${src}`);
+      currentAudio = null;
       resolve();
     };
     
     audio.onerror = (error) => {
-      debug.error(`❌ Error loading ${src}: ${error.type || 'Unknown error'}`);
+      debug.error(`❌ Error: ${src} - ${error.type || 'Network error'}`);
+      currentAudio = null;
       resolve();
     };
 
@@ -118,18 +125,26 @@ function playAudio(src) {
       debug.success(`▶️ Ready to play: ${src}`);
     };
 
-    // Play with error handling
-    const playPromise = audio.play();
-    if (playPromise !== undefined) {
-      playPromise
-        .then(() => {
-          debug.success(`🎵 Playing: ${src}`);
-        })
-        .catch(error => {
-          debug.error(`❌ Play failed ${src}: ${error.message}`);
-          resolve();
-        });
-    }
+    audio.onplay = () => {
+      debug.success(`🎵 Playing: ${src}`);
+    };
+
+    // Try to play with fallback
+    setTimeout(() => {
+      const playPromise = audio.play();
+      
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            debug.success(`🎵 Play started: ${src}`);
+          })
+          .catch(error => {
+            debug.error(`❌ Play failed: ${error.name} - ${error.message}`);
+            // Continue anyway
+            resolve();
+          });
+      }
+    }, 100);
   });
 }
 
@@ -137,7 +152,7 @@ function delay(ms) {
   return new Promise(resolve => {
     debug.info(`⏳ Waiting ${ms}ms...`);
     setTimeout(() => {
-      debug.info(`✅ Wait finished (${ms}ms)`);
+      debug.success(`✅ Wait finished (${ms}ms)`);
       resolve();
     }, ms);
   });
@@ -248,6 +263,7 @@ function render() {
     const content = document.createElement("div");
     content.className = "list-item-content";
     content.innerHTML = `
+    
       <div>
         <span class="list-item-primary">${w.ua}</span>
         <span class="list-item-separator">/</span>
@@ -306,6 +322,11 @@ async function speak(id) {
   debug.info(`⏳ 3 second delay starting...`);
   await delay(3000);
   
+  if (stopFlag) {
+    debug.info(`⏸ Cancelled during delay`);
+    return;
+  }
+  
   debug.info(`📂 IT File: ${itFile}`);
   await playAudio(itFile);
   
@@ -361,6 +382,7 @@ function pause() {
 
   if (currentAudio) {
     currentAudio.pause();
+    currentAudio.currentTime = 0;
     currentAudio = null;
   }
 }
