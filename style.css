@@ -27,13 +27,13 @@
   --radius-md: 12px;
   --radius-lg: 16px;
   
-  /* Typography */
+  /* Typography - MOBILE FIRST (LARGER) */
   --font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
-  --font-size-sm: 14px;
-  --font-size-base: 16px;
-  --font-size-lg: 18px;
-  --font-size-xl: 24px;
-  --font-size-2xl: 28px;
+  --font-size-sm: 16px;
+  --font-size-base: 18px;
+  --font-size-lg: 22px;
+  --font-size-xl: 28px;
+  --font-size-2xl: 32px;
   
   /* Minimum touch target size (accessibility) */
   --touch-target: 48px;
@@ -58,10 +58,11 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+  font-size: 16px;
 }
 
 body {
-  padding-bottom: 120px; /* Space for fixed controls bar on mobile */
+  padding-bottom: 140px; /* Space for fixed controls bar on mobile */
 }
 
 /* ============================================
@@ -80,11 +81,11 @@ body {
   padding: var(--spacing-xl) var(--spacing-lg);
   
   text-align: center;
-  font-size: var(--font-size-2xl);
+  font-size: var(--font-size-4xl);
   font-weight: 600;
   line-height: 1.6;
   
-  min-height: 50vh;
+  min-height: 40vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -121,7 +122,7 @@ body {
 }
 
 /* ============================================
-   LIST ITEMS
+   LIST ITEMS - MOBILE FIRST (LARGER)
    ============================================ */
 
 .list-item {
@@ -133,10 +134,10 @@ body {
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   
-  padding: var(--spacing-md) var(--spacing-lg);
+  padding: var(--spacing-lg) var(--spacing-lg);
   margin: var(--spacing-sm) 0;
   
-  min-height: var(--touch-target);
+  min-height: 64px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
@@ -165,12 +166,14 @@ body {
   color: var(--color-text-primary);
   font-size: var(--font-size-base);
   font-weight: 500;
+  line-height: 1.4;
 }
 
 .list-item-secondary {
   color: var(--color-accent);
   font-size: var(--font-size-sm);
   font-weight: 400;
+  line-height: 1.4;
 }
 
 .list-item-separator {
@@ -209,7 +212,7 @@ body {
 }
 
 .list-item-action i {
-  font-size: 24px;
+  font-size: 28px;
   color: var(--color-text-primary);
   transition: color 0.15s ease;
 }
@@ -234,7 +237,7 @@ body {
   z-index: 999;
   
   width: 100%;
-  height: 120px;
+  height: 130px;
   
   display: flex;
   align-items: center;
@@ -252,13 +255,13 @@ body {
 }
 
 /* ============================================
-   CONTROL BUTTONS - MOBILE FIRST (48px minimum)
+   CONTROL BUTTONS - MOBILE FIRST (56px)
    ============================================ */
 
 .btn-control {
-  /* Accessibility: Minimum touch target 48x48px per WCAG guidelines */
-  width: var(--touch-target);
-  height: var(--touch-target);
+  /* Accessibility: Large touch target for mobile */
+  width: 56px;
+  height: 56px;
   
   border-radius: var(--radius-md);
   border: none;
@@ -270,7 +273,7 @@ body {
   align-items: center;
   justify-content: center;
   
-  font-size: 20px;
+  font-size: 24px;
   cursor: pointer;
   
   transition: all 0.15s ease;
@@ -306,26 +309,36 @@ body {
    ============================================ */
 
 @media (min-width: 768px) {
+  :root {
+    --font-size-sm: 14px;
+    --font-size-base: 16px;
+    --font-size-lg: 18px;
+    --font-size-xl: 24px;
+    --font-size-2xl: 28px;
+  }
+
   body {
     padding-bottom: 100px;
+    font-size: 16px;
   }
 
   .current-word-display {
     font-size: var(--font-size-2xl);
     padding: var(--spacing-xl) var(--spacing-lg);
+    min-height: 150px;
   }
 
   .list-item {
     padding: var(--spacing-md) var(--spacing-lg);
-    min-height: auto;
+    min-height: 56px;
   }
 
   .list-item-primary {
-    font-size: 16px;
+    font-size: var(--font-size-base);
   }
 
   .list-item-secondary {
-    font-size: 14px;
+    font-size: 13px;
   }
 
   .list-item-action {
@@ -358,6 +371,10 @@ body {
 @media (min-width: 1024px) {
   body {
     padding-bottom: 88px;
+  }
+
+  .current-word-display {
+    min-height: 140px;
   }
 
   .controls-bar {
