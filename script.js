@@ -172,7 +172,7 @@ async function speak(id) {
   if (stopFlag) return;
 
   await playAudio(`audio/${id}_ua.mp3`);
-  await delay(4000);
+  await delay(500);
   await playAudio(`audio/${id}_it.mp3`);
 }
 
