@@ -1,6 +1,6 @@
 /* ============================================
    WORD PLAYER - DESIGN SYSTEM
-   Dark Modern UI with Blue Accents
+   Mobile-First Approach with Accessibility
    ============================================ */
 
 :root {
@@ -34,6 +34,9 @@
   --font-size-lg: 18px;
   --font-size-xl: 24px;
   --font-size-2xl: 28px;
+  
+  /* Minimum touch target size (accessibility) */
+  --touch-target: 48px;
 }
 
 /* ============================================
@@ -58,7 +61,7 @@ body {
 }
 
 body {
-  padding-bottom: 100px; /* Space for fixed controls bar */
+  padding-bottom: 120px; /* Space for fixed controls bar on mobile */
 }
 
 /* ============================================
@@ -72,14 +75,14 @@ body {
 
 .current-word-display {
   background-color: var(--color-bg-header);
-  border: 1px solid var(--color-border);
+  border: 2px solid var(--color-accent);
   border-radius: var(--radius-lg);
   padding: var(--spacing-xl) var(--spacing-lg);
   
   text-align: center;
-  font-size: var(--font-size-2xl);
+  font-size: var(--font-size-xl);
   font-weight: 600;
-  line-height: 1.4;
+  line-height: 1.6;
   
   min-height: 50vh;
   display: flex;
@@ -87,7 +90,8 @@ body {
   justify-content: center;
   flex-direction: row;
   gap: var(--spacing-sm);
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  white-space: nowrap;
 }
 
 .current-word-display .uk {
@@ -132,11 +136,13 @@ body {
   padding: var(--spacing-md) var(--spacing-lg);
   margin: var(--spacing-sm) 0;
   
+  min-height: var(--touch-target);
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
-.list-item:hover {
+.list-item:hover,
+.list-item:focus-within {
   background-color: var(--color-bg-tertiary);
   border-color: var(--color-accent);
 }
@@ -152,6 +158,7 @@ body {
   flex-direction: column;
   gap: var(--spacing-xs);
   flex: 1;
+  min-width: 0;
 }
 
 .list-item-primary {
@@ -180,8 +187,9 @@ body {
   align-items: center;
   justify-content: center;
   
-  width: 40px;
-  height: 40px;
+  /* Accessibility: Minimum touch target 48x48px */
+  width: var(--touch-target);
+  height: var(--touch-target);
   
   background-color: transparent;
   border: none;
@@ -189,15 +197,25 @@ body {
   
   transition: all 0.15s ease;
   -webkit-tap-highlight-color: transparent;
+  
+  /* Focus visible for keyboard navigation */
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+.list-item-action:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
 }
 
 .list-item-action i {
-  font-size: 18px;
+  font-size: 24px;
   color: var(--color-text-primary);
   transition: color 0.15s ease;
 }
 
-.list-item-action:hover i {
+.list-item-action:hover i,
+.list-item-action:focus i {
   color: var(--color-accent);
 }
 
@@ -206,7 +224,7 @@ body {
 }
 
 /* ============================================
-   CONTROLS BAR (MOBILE FIXED)
+   CONTROLS BAR (MOBILE FIXED) - MOBILE FIRST
    ============================================ */
 
 .controls-bar {
@@ -216,14 +234,15 @@ body {
   z-index: 999;
   
   width: 100%;
-  height: 88px;
+  height: 120px;
   
   display: flex;
   align-items: center;
   justify-content: center;
   gap: var(--spacing-lg);
+  flex-wrap: wrap;
   
-  padding: var(--spacing-md) var(--spacing-md) calc(var(--spacing-md) + env(safe-area-inset-bottom)) var(--spacing-md);
+  padding: var(--spacing-lg) var(--spacing-md) calc(var(--spacing-lg) + env(safe-area-inset-bottom)) var(--spacing-md);
   
   background: rgba(11, 11, 15, 0.92);
   backdrop-filter: blur(20px);
@@ -233,12 +252,13 @@ body {
 }
 
 /* ============================================
-   CONTROL BUTTONS
+   CONTROL BUTTONS - MOBILE FIRST (48px minimum)
    ============================================ */
 
 .btn-control {
-  width: 56px;
-  height: 56px;
+  /* Accessibility: Minimum touch target 48x48px per WCAG guidelines */
+  width: var(--touch-target);
+  height: var(--touch-target);
   
   border-radius: var(--radius-md);
   border: none;
@@ -255,11 +275,20 @@ body {
   
   transition: all 0.15s ease;
   -webkit-tap-highlight-color: transparent;
+  
+  /* Focus visible for keyboard navigation */
+  outline: 2px solid transparent;
+  outline-offset: 2px;
 }
 
 .btn-control:hover {
   background-color: rgba(255, 255, 255, 0.12);
   color: var(--color-accent);
+}
+
+.btn-control:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
 }
 
 .btn-control:active {
@@ -269,136 +298,77 @@ body {
 
 .btn-control i {
   transition: color 0.15s ease;
+  pointer-events: none;
 }
 
 /* ============================================
-   CONTROL BUTTONS
+   RESPONSIVE DESIGN - TABLET
    ============================================ */
 
-.btn-control {
-  width: 56px;
-  height: 56px;
-  
-  border-radius: var(--radius-md);
-  border: none;
-  
-  background-color: rgba(255, 255, 255, 0.08);
-  color: var(--color-text-primary);
-  
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  
-  font-size: 20px;
-  cursor: pointer;
-  
-  transition: all 0.15s ease;
-  -webkit-tap-highlight-color: transparent;
-}
+@media (min-width: 768px) {
+  body {
+    padding-bottom: 100px;
+  }
 
-.btn-control:hover {
-  background-color: rgba(255, 255, 255, 0.12);
-  color: var(--color-accent);
-}
-
-.btn-control:active {
-  transform: scale(0.95);
-  background-color: rgba(255, 255, 255, 0.15);
-}
-
-.btn-control i {
-  transition: color 0.15s ease;
-}
-
-/* ============================================
-   RESPONSIVE DESIGN
-   ============================================ */
-
-@media (max-width: 768px) {
   .current-word-display {
-    font-size: var(--font-size-xl);
-    padding: var(--spacing-lg) var(--spacing-md);
-    min-height: 100px;
+    font-size: var(--font-size-2xl);
+    padding: var(--spacing-xl) var(--spacing-lg);
   }
 
   .list-item {
-    padding: var(--spacing-sm) var(--spacing-md);
+    padding: var(--spacing-md) var(--spacing-lg);
+    min-height: auto;
   }
 
   .list-item-primary {
-    font-size: 15px;
+    font-size: 16px;
   }
 
   .list-item-secondary {
-    font-size: 13px;
-  }
-
-  .controls-bar {
-    height: 80px;
-    gap: var(--spacing-md);
-  }
-
-  .btn-control {
-    width: 48px;
-    height: 48px;
-    font-size: 18px;
-  }
-}
-
-@media (max-width: 420px) {
-  body {
-    padding-bottom: 90px;
-  }
-
-  .header-display {
-    padding: var(--spacing-sm) var(--spacing-sm);
-    margin: var(--spacing-sm) var(--spacing-sm);
-  }
-
-  .current-word-display {
-    font-size: 20px;
-    padding: var(--spacing-lg) var(--spacing-sm);
-    min-height: 90px;
-  }
-
-  .list-container {
-    padding: 0 var(--spacing-xs);
-  }
-
-  .list-item {
-    padding: var(--spacing-sm) var(--spacing-sm);
-    margin: var(--spacing-xs) 0;
-  }
-
-  .list-item-primary {
     font-size: 14px;
   }
 
-  .list-item-secondary {
-    font-size: 12px;
-  }
-
   .list-item-action {
-    margin-left: var(--spacing-md);
-    width: 36px;
-    height: 36px;
+    width: 44px;
+    height: 44px;
   }
 
   .list-item-action i {
-    font-size: 16px;
+    font-size: 20px;
   }
 
   .controls-bar {
-    height: 76px;
-    gap: var(--spacing-sm);
-    padding: var(--spacing-sm) var(--spacing-sm) calc(var(--spacing-sm) + env(safe-area-inset-bottom)) var(--spacing-sm);
+    height: 88px;
+    gap: var(--spacing-lg);
+    flex-wrap: nowrap;
+    padding: var(--spacing-md) var(--spacing-md) calc(var(--spacing-md) + env(safe-area-inset-bottom)) var(--spacing-md);
   }
 
-  /* 40px x 40px buttons for mobile */
   .btn-control {
-    width: 40px;
-    height: 40px;
-    font-size: 16px;
+    width: 52px;
+    height: 52px;
+    font-size: 20px;
+  }
+}
+
+/* ============================================
+   RESPONSIVE DESIGN - DESKTOP
+   ============================================ */
+
+@media (min-width: 1024px) {
+  body {
+    padding-bottom: 88px;
+  }
+
+  .controls-bar {
+    height: 88px;
+    padding: var(--spacing-md) var(--spacing-md) calc(var(--spacing-md) + env(safe-area-inset-bottom)) var(--spacing-md);
+  }
+
+  .btn-control {
+    width: 56px;
+    height: 56px;
+    font-size: 22px;
   }
 }
 
@@ -440,97 +410,6 @@ body {
 }
 
 /* ============================================
-   RESPONSIVE DESIGN
-   ============================================ */
-
-@media (max-width: 768px) {
-  .current-word-display {
-    font-size: var(--font-size-xl);
-    padding: var(--spacing-lg) var(--spacing-md);
-    min-height: 100px;
-  }
-
-  .list-item {
-    padding: var(--spacing-sm) var(--spacing-md);
-  }
-
-  .list-item-primary {
-    font-size: 15px;
-  }
-
-  .list-item-secondary {
-    font-size: 13px;
-  }
-
-  .controls-bar {
-    height: 80px;
-    gap: var(--spacing-md);
-  }
-
-  .btn-control {
-    width: 48px;
-    height: 48px;
-    font-size: 18px;
-  }
-}
-
-@media (max-width: 420px) {
-  body {
-    padding-bottom: 90px;
-  }
-
-  .header-display {
-    padding: var(--spacing-sm) var(--spacing-sm);
-    margin: var(--spacing-sm) var(--spacing-sm);
-  }
-
-  .current-word-display {
-    font-size: 20px;
-    padding: var(--spacing-lg) var(--spacing-sm);
-    min-height: 90px;
-  }
-
-  .list-container {
-    padding: 0 var(--spacing-xs);
-  }
-
-  .list-item {
-    padding: var(--spacing-sm) var(--spacing-sm);
-    margin: var(--spacing-xs) 0;
-  }
-
-  .list-item-primary {
-    font-size: 14px;
-  }
-
-  .list-item-secondary {
-    font-size: 12px;
-  }
-
-  .list-item-action {
-    margin-left: var(--spacing-md);
-    width: 36px;
-    height: 36px;
-  }
-
-  .list-item-action i {
-    font-size: 16px;
-  }
-
-  .controls-bar {
-    height: 76px;
-    gap: var(--spacing-sm);
-    padding: var(--spacing-sm) var(--spacing-sm) calc(var(--spacing-sm) + env(safe-area-inset-bottom)) var(--spacing-sm);
-  }
-
-  .btn-control {
-    width: 44px;
-    height: 44px;
-    font-size: 16px;
-  }
-}
-
-/* ============================================
    ANIMATIONS
    ============================================ */
 
@@ -547,4 +426,27 @@ body {
 
 .list-item {
   animation: fadeIn 0.3s ease;
+}
+
+/* ============================================
+   ACCESSIBILITY - PREFERS REDUCED MOTION
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ============================================
+   DARK MODE SUPPORT
+   ============================================ */
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: var(--color-bg-primary);
+    color: var(--color-text-primary);
+  }
 }
