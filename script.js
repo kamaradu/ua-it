@@ -72,19 +72,14 @@ function updateWordsCount() {
 // =====================
 
 const phrases = [
-  "Сіма – ти молодець!",
-  "У тебе все вийде!",
-  "Шо нам, кабанам!",
-  "Я тебе дуже кохаю!"
+  "Готуйся до нового вікторини",
+  "Вчися італійської мови",
+  "Розширюй свої знання",
+  "Практикуйся щодня"
 ];
 
 let currentPhraseIndex = 0;
 let phraseInterval = null;
-
-// Convert hours to milliseconds
-function hoursToMilliseconds(hours) {
-  return hours * 60 * 60 * 1000;
-}
 
 function rotatePhrase() {
   const phraseElement = document.getElementById("rotatingPhrase");
@@ -94,10 +89,9 @@ function rotatePhrase() {
   phraseElement.textContent = phrases[currentPhraseIndex];
 }
 
-function startPhraseRotation(hours = 1) {
-  // Change phrase every X hours
-  const milliseconds = hoursToMilliseconds(hours);
-  phraseInterval = setInterval(rotatePhrase, milliseconds);
+function startPhraseRotation() {
+  // Change phrase every 3 seconds
+  phraseInterval = setInterval(rotatePhrase, 3000);
 }
 
 function stopPhraseRotation() {
@@ -160,7 +154,7 @@ function render() {
   const displayEl = document.getElementById("currentWord");
   displayEl.innerHTML =
     current
-      ? `<span class="uk">${current.ua}</span><span class="separator">/</span><span class="it">${current.it}</span>`
+      ? `<span class="uk">${current.ua}</span><span class="it">${current.it}</span>`
       : "";
 }
 
@@ -259,8 +253,8 @@ async function init() {
   // Update count immediately after loading
   updateWordsCount();
   
-  // Start rotating phrases - change every 1 hour
-  startPhraseRotation(0.5);
+  // Start rotating phrases
+  startPhraseRotation();
   
   // Render the list
   render();
