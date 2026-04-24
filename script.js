@@ -90,8 +90,8 @@ function rotatePhrase() {
 }
 
 function startPhraseRotation() {
-  // Change phrase every 6 seconds
-  phraseInterval = setInterval(rotatePhrase, 5000);
+  // Change phrase every 4 seconds
+  phraseInterval = setInterval(rotatePhrase, 4000);
 }
 
 function stopPhraseRotation() {
@@ -166,7 +166,7 @@ async function speak(id) {
   if (stopFlag) return;
 
   await playAudio(`audio/${id}_ua.mp3`);
-  await delay(200);
+  await delay(4000);
   await playAudio(`audio/${id}_it.mp3`);
 }
 
