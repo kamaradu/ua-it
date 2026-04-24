@@ -68,6 +68,40 @@ function updateWordsCount() {
 }
 
 // =====================
+// ROTATING PHRASES
+// =====================
+
+const phrases = [
+  "Готуйся до нового вікторини",
+  "Вчися італійської мови",
+  "Розширюй свої знання",
+  "Практикуйся щодня"
+];
+
+let currentPhraseIndex = 0;
+let phraseInterval = null;
+
+function rotatePhrase() {
+  const phraseElement = document.getElementById("rotatingPhrase");
+  if (!phraseElement) return;
+
+  currentPhraseIndex = (currentPhraseIndex + 1) % phrases.length;
+  phraseElement.textContent = phrases[currentPhraseIndex];
+}
+
+function startPhraseRotation() {
+  // Change phrase every 3 seconds
+  phraseInterval = setInterval(rotatePhrase, 3000);
+}
+
+function stopPhraseRotation() {
+  if (phraseInterval) {
+    clearInterval(phraseInterval);
+    phraseInterval = null;
+  }
+}
+
+// =====================
 // RENDER UI
 // =====================
 
@@ -218,6 +252,9 @@ async function init() {
   
   // Update count immediately after loading
   updateWordsCount();
+  
+  // Start rotating phrases
+  startPhraseRotation();
   
   // Render the list
   render();
