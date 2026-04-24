@@ -72,8 +72,8 @@ function render() {
     const content = document.createElement("div");
     content.className = "list-item-content";
     content.innerHTML = `
-      <div class="list-item-primary">${w.ua}</div>
       <div>
+        <span class="list-item-primary">${w.ua}</span>
         <span class="list-item-separator">/</span>
         <span class="list-item-secondary">${w.it}</span>
       </div>
