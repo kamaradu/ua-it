@@ -378,7 +378,49 @@ button,
   margin-left: var(--spacing-md);
   flex-shrink: 0;
 }
+/* ============================================
+   CURRENT WORD DISPLAY - SINGLE LINE
+   ============================================ */
 
+#currentWord {
+  text-align: center;
+  font-size: var(--font-size-lg);
+  margin: var(--spacing-md) var(--spacing-sm);
+  line-height: 1.4;
+  padding: var(--spacing-lg);
+  background-color: var(--color-bg-secondary);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  min-height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
+#currentWord .uk {
+  color: var(--color-text-primary);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+#currentWord .separator {
+  color: var(--color-text-secondary);
+  margin: 0 var(--spacing-xs);
+  white-space: nowrap;
+}
+
+#currentWord .it {
+  color: var(--color-accent);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+#currentWord.current {
+  min-height: 60px;
+}
 /* ============================================
    FORMS & INPUTS
    ============================================ */
