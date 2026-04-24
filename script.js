@@ -320,7 +320,7 @@ async function speak(id) {
   await playAudio(uaFile);
   
   debug.info(`⏳ 3 second delay starting...`);
-  await delay(300);
+  await delay(3000);
   
   if (stopFlag) {
     debug.info(`⏸ Cancelled during delay`);
