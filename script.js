@@ -90,8 +90,8 @@ function rotatePhrase() {
 }
 
 function startPhraseRotation() {
-  // Change phrase every 3 seconds
-  phraseInterval = setInterval(rotatePhrase, 3000);
+  // Change phrase every 6 seconds
+  phraseInterval = setInterval(rotatePhrase, 5000);
 }
 
 function stopPhraseRotation() {
