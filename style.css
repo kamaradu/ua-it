@@ -107,7 +107,7 @@ a:hover {
 
 #currentWord {
   text-align: center;
-  font-size: var(--font-size-lg);
+  font-size: var(--font-size-2xl);
   margin: var(--spacing-md) var(--spacing-sm);
   line-height: 1.4;
   padding: var(--spacing-lg);
