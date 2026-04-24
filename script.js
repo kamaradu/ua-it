@@ -5,18 +5,23 @@ const url =
 let words = [];
 let index = 0;
 let playing = false;
-let timeout;
-
-const DELAY = 4000;
+let timeout = null;
 
 // =====================
-// AUDIO ENGINE (FIXED)
+// GLOBAL CONTROL
 // =====================
 
 let currentAudio = null;
+let stopFlag = false;
+
+// =====================
+// AUDIO ENGINE (SAFE)
+// =====================
 
 function playAudio(src) {
   return new Promise((resolve) => {
+    if (stopFlag) return resolve();
+
     if (currentAudio) {
       currentAudio.pause();
       currentAudio = null;
@@ -58,7 +63,7 @@ function loadWords() {
 }
 
 // =====================
-// RENDER
+// RENDER UI
 // =====================
 
 function render() {
@@ -87,31 +92,34 @@ function render() {
 }
 
 // =====================
-// SPEAK (FIXED ORDER)
+// SPEAK (UA → IT)
 // =====================
 
 async function speak(id) {
+  if (stopFlag) return;
+
   await playAudio(`audio/${id}_ua.mp3`);
   await delay(200);
   await playAudio(`audio/${id}_it.mp3`);
 }
 
 // =====================
-// SEQUENCE (NO OVERLAP)
+// SEQUENCE ENGINE (NO OVERLAP)
 // =====================
 
 async function playSequence(i) {
   clearTimeout(timeout);
+  stopFlag = false;
 
   index = i;
   render();
 
   const w = words[i];
-  if (!w) return;
+  if (!w || stopFlag) return;
 
   await speak(w.id);
 
-  if (playing) {
+  if (playing && !stopFlag) {
     timeout = setTimeout(() => {
       next();
     }, 300);
@@ -123,12 +131,17 @@ async function playSequence(i) {
 // =====================
 
 function play() {
+  stopFlag = false;
   playing = true;
+  clearTimeout(timeout);
+
   playSequence(index);
 }
 
 function pause() {
   playing = false;
+  stopFlag = true;
+
   clearTimeout(timeout);
 
   if (currentAudio) {
@@ -148,13 +161,22 @@ function prev() {
 }
 
 function randomPlay() {
+  stopFlag = false;
   playing = true;
-  const i = Math.floor(Math.random() * words.length);
-  playSequence(i);
+
+  clearTimeout(timeout);
+
+  index = Math.floor(Math.random() * words.length);
+
+  playSequence(index);
 }
 
 function playOne(i) {
+  stopFlag = false;
   playing = false;
+
+  clearTimeout(timeout);
+
   playSequence(i);
 }
 
