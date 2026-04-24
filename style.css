@@ -72,7 +72,7 @@ body {
 
 .current-word-display {
   background-color: var(--color-bg-header);
-  border: 2px solid var(--color-accent);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   padding: var(--spacing-xl) var(--spacing-lg);
   
@@ -81,14 +81,13 @@ body {
   font-weight: 600;
   line-height: 1.4;
   
-  min-height: auto;
+  min-height: 50vh;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: row;
   gap: var(--spacing-sm);
-  flex-wrap: nowrap;
-  white-space: nowrap;
+  flex-wrap: wrap;
 }
 
 .current-word-display .uk {
