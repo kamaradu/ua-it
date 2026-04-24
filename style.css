@@ -132,7 +132,7 @@ a:hover {
 }
 
 #currentWord.current {
-  min-height: 80px;
+  min-height: 35vh;
   display: flex;
   align-items: center;
   justify-content: center;
