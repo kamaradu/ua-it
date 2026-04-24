@@ -5,16 +5,11 @@ let words = [];
 let index = 0;
 let playing = false;
 let timeout = null;
-
-// =====================
-// GLOBAL CONTROL
-// =====================
-
 let currentAudio = null;
 let stopFlag = false;
 
 // =====================
-// AUDIO ENGINE (SAFE)
+// AUDIO ENGINE
 // =====================
 
 function playAudio(src) {
@@ -70,23 +65,23 @@ function render() {
   list.innerHTML = "";
 
   words.forEach((w, i) => {
-    const row = document.createElement("div");
-    row.className = "row" + (i === index ? " active" : "");
+    const listItem = document.createElement("div");
+    listItem.className = "list-item" + (i === index ? " active" : "");
 
-    // Create row content
-    const rowContent = document.createElement("div");
-    rowContent.className = "row-content";
-    rowContent.innerHTML = `
-      <div class="row-primary">${w.ua}</div>
+    // Content section
+    const content = document.createElement("div");
+    content.className = "list-item-content";
+    content.innerHTML = `
+      <div class="list-item-primary">${w.ua}</div>
       <div>
-        <span class="row-separator">/</span>
-        <span class="row-secondary">${w.it}</span>
+        <span class="list-item-separator">/</span>
+        <span class="list-item-secondary">${w.it}</span>
       </div>
     `;
 
-    // Create play button
+    // Play button
     const playBtn = document.createElement("button");
-    playBtn.className = "row-action btn-icon-small";
+    playBtn.className = "list-item-action";
     playBtn.type = "button";
     playBtn.title = "Play";
     playBtn.onclick = (e) => {
@@ -95,15 +90,16 @@ function render() {
     };
     playBtn.innerHTML = '<i class="fas fa-play"></i>';
 
-    row.appendChild(rowContent);
-    row.appendChild(playBtn);
+    listItem.appendChild(content);
+    listItem.appendChild(playBtn);
 
-    list.appendChild(row);
+    list.appendChild(listItem);
   });
 
+  // Update header display
   const current = words[index];
-  // Display in one line: як? / come?
-  document.getElementById("currentWord").innerHTML =
+  const displayEl = document.getElementById("currentWord");
+  displayEl.innerHTML =
     current
       ? `<span class="uk">${current.ua}</span><span class="separator">/</span><span class="it">${current.it}</span>`
       : "";
@@ -122,7 +118,7 @@ async function speak(id) {
 }
 
 // =====================
-// SEQUENCE ENGINE (NO OVERLAP)
+// SEQUENCE ENGINE
 // =====================
 
 async function playSequence(i) {
@@ -152,14 +148,12 @@ function play() {
   stopFlag = false;
   playing = true;
   clearTimeout(timeout);
-
   playSequence(index);
 }
 
 function pause() {
   playing = false;
   stopFlag = true;
-
   clearTimeout(timeout);
 
   if (currentAudio) {
@@ -181,20 +175,16 @@ function prev() {
 function randomPlay() {
   stopFlag = false;
   playing = true;
-
   clearTimeout(timeout);
 
   index = Math.floor(Math.random() * words.length);
-
   playSequence(index);
 }
 
 function playOne(i) {
   stopFlag = false;
   playing = false;
-
   clearTimeout(timeout);
-
   playSequence(i);
 }
 
