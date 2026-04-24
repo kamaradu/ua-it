@@ -190,3 +190,11 @@ async function init() {
 }
 
 init();
+
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("btnPlay")?.addEventListener("click", play);
+  document.getElementById("btnPause")?.addEventListener("click", pause);
+  document.getElementById("btnNext")?.addEventListener("click", next);
+  document.getElementById("btnPrev")?.addEventListener("click", prev);
+  document.getElementById("btnRandom")?.addEventListener("click", randomPlay);
+});
