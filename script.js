@@ -263,7 +263,7 @@ function render() {
     const content = document.createElement("div");
     content.className = "list-item-content";
     content.innerHTML = `
-    
+      
       <div>
         <span class="list-item-primary">${w.ua}</span>
         <span class="list-item-separator">/</span>
@@ -286,7 +286,7 @@ function render() {
     listItem.appendChild(playBtn);
 
     listItem.onclick = () => {
-      debug.info(`🎯 List item clicked for word: ${w.ua}`);
+      debug.info(`��� List item clicked for word: ${w.ua}`);
       playOne(i);
     };
 
@@ -319,8 +319,8 @@ async function speak(id) {
   
   await playAudio(uaFile);
   
-  debug.info(`⏳ 3 second delay starting...`);
-  await delay(3000);
+  debug.info(`⏳ 200ms delay starting...`);
+  await delay(200);
   
   if (stopFlag) {
     debug.info(`⏸ Cancelled during delay`);
