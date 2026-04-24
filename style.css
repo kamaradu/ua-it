@@ -337,6 +337,49 @@ button,
 }
 
 /* ============================================
+   SMALL ICON BUTTON (IN LIST)
+   ============================================ */
+
+.btn-icon-small {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: var(--color-text-primary);
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn-icon-small:hover {
+  background-color: rgba(255, 255, 255, 0.12);
+  color: var(--color-accent);
+}
+
+.btn-icon-small:active {
+  transform: scale(0.95);
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.btn-icon-small i {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.row-action {
+  margin-left: var(--spacing-md);
+  flex-shrink: 0;
+}
+
+/* ============================================
    FORMS & INPUTS
    ============================================ */
 
