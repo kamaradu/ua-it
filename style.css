@@ -272,6 +272,137 @@ body {
 }
 
 /* ============================================
+   CONTROL BUTTONS
+   ============================================ */
+
+.btn-control {
+  width: 56px;
+  height: 56px;
+  
+  border-radius: var(--radius-md);
+  border: none;
+  
+  background-color: rgba(255, 255, 255, 0.08);
+  color: var(--color-text-primary);
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  font-size: 20px;
+  cursor: pointer;
+  
+  transition: all 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn-control:hover {
+  background-color: rgba(255, 255, 255, 0.12);
+  color: var(--color-accent);
+}
+
+.btn-control:active {
+  transform: scale(0.95);
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.btn-control i {
+  transition: color 0.15s ease;
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+
+@media (max-width: 768px) {
+  .current-word-display {
+    font-size: var(--font-size-xl);
+    padding: var(--spacing-lg) var(--spacing-md);
+    min-height: 100px;
+  }
+
+  .list-item {
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+
+  .list-item-primary {
+    font-size: 15px;
+  }
+
+  .list-item-secondary {
+    font-size: 13px;
+  }
+
+  .controls-bar {
+    height: 80px;
+    gap: var(--spacing-md);
+  }
+
+  .btn-control {
+    width: 48px;
+    height: 48px;
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 420px) {
+  body {
+    padding-bottom: 90px;
+  }
+
+  .header-display {
+    padding: var(--spacing-sm) var(--spacing-sm);
+    margin: var(--spacing-sm) var(--spacing-sm);
+  }
+
+  .current-word-display {
+    font-size: 20px;
+    padding: var(--spacing-lg) var(--spacing-sm);
+    min-height: 90px;
+  }
+
+  .list-container {
+    padding: 0 var(--spacing-xs);
+  }
+
+  .list-item {
+    padding: var(--spacing-sm) var(--spacing-sm);
+    margin: var(--spacing-xs) 0;
+  }
+
+  .list-item-primary {
+    font-size: 14px;
+  }
+
+  .list-item-secondary {
+    font-size: 12px;
+  }
+
+  .list-item-action {
+    margin-left: var(--spacing-md);
+    width: 36px;
+    height: 36px;
+  }
+
+  .list-item-action i {
+    font-size: 16px;
+  }
+
+  .controls-bar {
+    height: 76px;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-sm) calc(var(--spacing-sm) + env(safe-area-inset-bottom)) var(--spacing-sm);
+  }
+
+  /* 40px x 40px buttons for mobile */
+  .btn-control {
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+  }
+}
+
+/* ============================================
    UTILITY CLASSES
    ============================================ */
 
