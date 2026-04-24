@@ -1,3 +1,4 @@
+
 const url =
   "https://docs.google.com/spreadsheets/d/e/2PACX-1vRYxU7tQ9zljOOosiBseSOOUUmNHINufeWHdczDkEZMXzqPHyO81aXhrvQojO42j8AW5teS_nROvrKe/pub?gid=0&single=true&output=csv";
 
@@ -8,14 +9,44 @@ let timeout;
 
 const DELAY = 4000;
 
-// ===== LOAD WORDS
+// =====================
+// AUDIO ENGINE (FIXED)
+// =====================
+
+let currentAudio = null;
+
+function playAudio(src) {
+  return new Promise((resolve) => {
+    if (currentAudio) {
+      currentAudio.pause();
+      currentAudio = null;
+    }
+
+    const audio = new Audio(src);
+    currentAudio = audio;
+
+    audio.onended = () => resolve();
+    audio.onerror = () => resolve();
+
+    audio.play();
+  });
+}
+
+function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+// =====================
+// LOAD WORDS
+// =====================
+
 function loadWords() {
   return fetch(url)
     .then(res => res.text())
     .then(text => {
       return text
         .split("\n")
-        .slice(1) // 🔥 ВАЖЛИВО: прибираємо header
+        .slice(1)
         .map(r => r.split(","))
         .filter(r => r.length >= 3)
         .map(r => ({
@@ -26,7 +57,10 @@ function loadWords() {
     });
 }
 
-// ===== RENDER
+// =====================
+// RENDER
+// =====================
+
 function render() {
   const list = document.getElementById("list");
   list.innerHTML = "";
@@ -52,35 +86,42 @@ function render() {
       : "";
 }
 
-// ===== AUDIO (ID-based)
-function speak(id) {
-  const uaAudio = new Audio(`audio/${id}_ua.mp3`);
+// =====================
+// SPEAK (FIXED ORDER)
+// =====================
 
-  uaAudio.play();
-
-  uaAudio.onended = () => {
-    const itAudio = new Audio(`audio/${id}_it.mp3`);
-    itAudio.play();
-  };
+async function speak(id) {
+  await playAudio(`audio/${id}_ua.mp3`);
+  await delay(200);
+  await playAudio(`audio/${id}_it.mp3`);
 }
 
-// ===== SEQUENCE
-function playSequence(i) {
+// =====================
+// SEQUENCE (NO OVERLAP)
+// =====================
+
+async function playSequence(i) {
   clearTimeout(timeout);
 
   index = i;
   render();
 
   const w = words[i];
+  if (!w) return;
 
-  speak(w.id);
+  await speak(w.id);
 
   if (playing) {
-    timeout = setTimeout(next, DELAY);
+    timeout = setTimeout(() => {
+      next();
+    }, 300);
   }
 }
 
-// ===== CONTROLS
+// =====================
+// CONTROLS
+// =====================
+
 function play() {
   playing = true;
   playSequence(index);
@@ -89,6 +130,11 @@ function play() {
 function pause() {
   playing = false;
   clearTimeout(timeout);
+
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio = null;
+  }
 }
 
 function next() {
@@ -112,7 +158,10 @@ function playOne(i) {
   playSequence(i);
 }
 
-// ===== INIT
+// =====================
+// INIT
+// =====================
+
 async function init() {
   words = await loadWords();
   render();
