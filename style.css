@@ -1,27 +1,38 @@
 
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
   background: #0b0b0f;
   color: #f2f2f7;
+
+  /* важливо для мобільних */
+  -webkit-text-size-adjust: 100%;
 }
 
 /* ===================== */
-/* HEADER / TEXT */
+/* HEADER */
 /* ===================== */
 
 h1 {
   text-align: center;
-  margin-top: 20px;
+  margin-top: 16px;
+  font-size: 20px;
   font-weight: 600;
-  color: #f2f2f7;
 }
+
+/* ===================== */
+/* CURRENT WORD */
+/* ===================== */
 
 #currentWord {
   text-align: center;
-  font-size: 22px;
-  margin: 20px 0;
-  color: #f2f2f7;
+  font-size: 20px;
+  margin: 16px 12px;
+  line-height: 1.4;
 }
 
 .it {
@@ -33,20 +44,23 @@ h1 {
 /* ===================== */
 
 #list {
-  padding-bottom: 120px; /* щоб не перекривалось контролами */
+  padding: 0 10px 110px 10px; /* місце під controls */
 }
 
 .row {
   display: flex;
   justify-content: space-between;
-  padding: 12px 16px;
-  margin: 6px 12px;
+  align-items: center;
+
+  padding: 12px 12px;
+  margin: 8px 0;
+
   border-radius: 12px;
 
   background: #1c1c1e;
   color: #f2f2f7;
 
-  transition: 0.2s;
+  font-size: 15px;
 }
 
 .row.active {
@@ -54,7 +68,7 @@ h1 {
 }
 
 /* ===================== */
-/* CONTROLS BAR (FULL WIDTH) */
+/* CONTROLS (MOBILE FIXED BAR) */
 /* ===================== */
 
 #controls {
@@ -63,14 +77,16 @@ h1 {
   left: 0;
 
   width: 100%;
-  height: 80px;
+  height: 72px;
 
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 14px;
+  gap: 12px;
 
-  background: rgba(20, 20, 24, 0.85);
+  padding-bottom: env(safe-area-inset-bottom); /* iPhone safe area */
+
+  background: rgba(20, 20, 24, 0.92);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
 
@@ -78,7 +94,7 @@ h1 {
 }
 
 /* ===================== */
-/* BUTTONS (40x40) */
+/* BUTTONS (MOBILE FRIENDLY) */
 /* ===================== */
 
 #controls button {
@@ -97,12 +113,43 @@ h1 {
 
   font-size: 16px;
 
+  -webkit-tap-highlight-color: transparent;
+
   cursor: pointer;
 
   transition: transform 0.15s ease, background 0.2s;
 }
 
 #controls button:active {
-  transform: scale(0.92);
+  transform: scale(0.9);
   background: #3a3a3c;
+}
+
+/* ===================== */
+/* SMALL SCREENS TUNING */
+/* ===================== */
+
+@media (max-width: 420px) {
+  h1 {
+    font-size: 18px;
+  }
+
+  #currentWord {
+    font-size: 18px;
+  }
+
+  .row {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  #controls {
+    height: 68px;
+    gap: 10px;
+  }
+
+  #controls button {
+    width: 38px;
+    height: 38px;
+  }
 }
